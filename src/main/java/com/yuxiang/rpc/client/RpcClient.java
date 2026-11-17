@@ -15,8 +15,19 @@ public class RpcClient {
 
     private final String host;
     private final int port;
+    private final int connectTimeoutMillis;
+    private final int readTimeoutMillis;
 
     public RpcClient(String host, int port) {
+        this(host, port, 3000, 5000);
+    }
+
+    public RpcClient(
+            String host,
+            int port,
+            int connectTimeoutMillis,
+            int readTimeoutMillis
+    ) {
         if (host == null || host.isBlank()) {
             throw new IllegalArgumentException("服务端地址不能为空");
         }
@@ -25,8 +36,14 @@ public class RpcClient {
             throw new IllegalArgumentException("端口必须在 1～65535 之间");
         }
 
+        if (connectTimeoutMillis <= 0 || readTimeoutMillis <= 0) {
+            throw new IllegalArgumentException("超时时间必须大于 0 毫秒");
+        }
+
         this.host = host;
         this.port = port;
+        this.connectTimeoutMillis = connectTimeoutMillis;
+        this.readTimeoutMillis = readTimeoutMillis;
     }
 
     public RpcResponse send(RpcRequest request)
@@ -43,11 +60,10 @@ public class RpcClient {
             // 建立连接最多等待 3 秒。
             socket.connect(
                     new InetSocketAddress(host, port),
-                    3000
+                    connectTimeoutMillis
             );
-
             // 等待网络数据最多阻塞 5 秒。
-            socket.setSoTimeout(5000);
+            socket.setSoTimeout(readTimeoutMillis);
 
             try (ObjectOutputStream output =
                          new ObjectOutputStream(socket.getOutputStream())) {

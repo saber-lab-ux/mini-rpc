@@ -15,7 +15,15 @@ public class ProviderMain {
                 new HelloServiceImpl()
         );
 
-        RpcServer server = new RpcServer(9000, registry);
+        RpcServer server = new RpcServer(
+                9000,
+                registry,
+                5000
+        );
+
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(server::close, "rpc-server-shutdown")
+        );
 
         server.start();
     }

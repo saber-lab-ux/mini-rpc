@@ -11,7 +11,7 @@
 每个版本的设计思路、实现过程和问题复盘记录在对应博客中。
 
 - 第一版：基础 Socket RPC —— https://blog.csdn.net/2604_95105375/article/details/170868895?sharetype=blogdetail&sharerId=170868895&sharerefer=PC&sharesource=2604_95105375&spm=1011.2480.3001.8118
-- 第二版：动态代理、并发处理与资源清理 —— 博客地址待补充。
+- 第二版：动态代理、并发处理与资源清理 。
 
 ## 当前功能
 
